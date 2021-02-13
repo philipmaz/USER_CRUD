@@ -12,25 +12,31 @@ public class DBUtil {
     private static final String DB_PASS="coderslab";
 
     public static Connection connect(String dbName) throws SQLException{
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
         final String urlWithDbName=String.format(DB_URL,dbName);
         return DriverManager.getConnection(urlWithDbName,DB_USER,DB_PASS);
 
     }
 
-    private static DataSource dataSource;
-    public static Connection getConnection() throws SQLException {
-        return getInstance().getConnection();   }
-    private static DataSource getInstance() {
-        if (dataSource == null) {
-            try {
-                Context initContext = new InitialContext();
-                Context envContext = (Context)initContext.lookup("java:/comp/env");
-                dataSource = (DataSource)envContext.lookup("jdbc/users");
-            } catch (NamingException e) { e.printStackTrace(); }
-        }
-        return dataSource;
-
-    }
+//    private static DataSource dataSource;
+//    public static Connection getConnection() throws SQLException {
+//        return getInstance().getConnection();   }
+//    private static DataSource getInstance() {
+//        if (dataSource == null) {
+//            try {
+//                Context initContext = new InitialContext();
+//                Context envContext = (Context)initContext.lookup("java:/comp/env");
+//                dataSource = (DataSource)envContext.lookup("jdbc/users");
+//            } catch (NamingException e) { e.printStackTrace(); }
+//        }
+//        return dataSource;
+//
+//    }
 
     public static void insert(Connection conn, String query, String... params) {
         try ( PreparedStatement statement = conn.prepareStatement(query)) {
